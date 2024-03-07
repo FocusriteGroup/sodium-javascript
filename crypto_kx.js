@@ -56,11 +56,9 @@ function crypto_kx_client_session_keys(rx, tx, client_pk, client_sk, server_pk) 
   hashInput.set(server_pk, q.length + client_pk.length);
 
   crypto_generichash(keys, hashInput);
-
-  for (let i = 0; i < crypto_kx_SESSIONKEYBYTES; i++) {
-    rx[i] = keys[i];
-    tx[i] = keys[i + crypto_kx_SESSIONKEYBYTES];
-  }
+  
+  rx.set(keys.subarray(0, crypto_kx_SESSIONKEYBYTES));
+  tx.set(keys.subarray(crypto_kx_SESSIONKEYBYTES, 2 * crypto_kx_SESSIONKEYBYTES));
 
   sodium_memzero(q);
   sodium_memzero(keys);
